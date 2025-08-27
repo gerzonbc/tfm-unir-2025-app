@@ -1,0 +1,30 @@
+﻿.recenter-btn-container {
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.recenter-btn-icon.p-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.recenter-btn-icon.p-button:hover {
+    background-color: #f0f0f0;
+}
+
+.recenter-btn-icon .material-icons {
+    font-size: 20px;
+    color: #333;
+}
