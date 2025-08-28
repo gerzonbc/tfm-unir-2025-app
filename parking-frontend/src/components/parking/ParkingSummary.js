@@ -2,7 +2,7 @@
 import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import PropTypes from 'prop-types';
-import { fetchParkingSummary } from '../../api/parkingSpots';
+import { fetchParkingSummary } from '../../api/parkingService';
 
 
 function severityFromFloorSummary(summary) {

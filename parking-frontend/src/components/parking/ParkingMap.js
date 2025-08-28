@@ -64,11 +64,11 @@ export default function ParkingMap() {
                 <ParkingMarkers parkings={parkings} onOpenModal={openModal} />
                 {userPosition && <RecenterButton userPosition={userPosition} />}
             </MapContainer >
-            <ParkingDetailModal
+            {selectedParking && <ParkingDetailModal
                 visible={modalVisible}
                 onHide={() => setModalVisible(false)}
                 parking={selectedParking}
-            />
+            />}
             <ParkingLegend />
         </>
     );
