@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
-import { fetchParkingsSpots } from '../../api/parkingSpots'
+// import { fetchParkingsSpots } from '../../api/parkingSpots'
 import { parkingSpotsMap1 as initialSpots } from '../../utils/parkingSpotsMap1';
 import { parkingSpotsMap2 as initialSpots2 } from '../../utils/parkingSpotsMap2';
 import { parkingSpotsMap3 as initialSpots3 } from '../../utils/parkingSpotsMap3';
@@ -16,15 +16,15 @@ export default function ParkingDetailModal({ visible, onHide, parking }) {
     const [spots3, setSpots3] = useState(initialSpots3);
 
 
-    useEffect(() => {
-        fetchParkingsSpots().then((spotState) => {
-            const updatedSpots = spots.map((spot) => {
-                const apiSpot = spotState.find(s => s.id === spot.id);
-                return apiSpot ? { ...spot, state: apiSpot.state } : spot;
-            });
-            setSpots(updatedSpots);
-        });
-    }, [spots]);
+    // useEffect(() => {
+    //     fetchParkingsSpots().then((spotState) => {
+    //         const updatedSpots = spots.map((spot) => {
+    //             const apiSpot = spotState.find(s => s.id === spot.id);
+    //             return apiSpot ? { ...spot, state: apiSpot.state } : spot;
+    //         });
+    //         setSpots(updatedSpots);
+    //     });
+    // }, [spots]);
 
     // if (!parking) return null;
 

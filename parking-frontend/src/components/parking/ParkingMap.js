@@ -1,9 +1,8 @@
 ﻿import React, { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import { fetchParkings } from '../../api/parkingService';
 import ParkingDetailModal from './ParkingDetailModal';
 import RecenterButton from '../commons/RecenterButton';
-import L from 'leaflet';
 import ParkingLegend from './ParkingLegend';
 import ParkingMarkers from './ParkingMarkers';
 import UserMarker from '../commons/UserMarker';
@@ -16,11 +15,6 @@ export default function ParkingMap() {
     const [userPosition, setUserPosition] = useState(null); // Posición real
     const [selectedParking, setSelectedParking] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
-
-    const userIcon = L.divIcon({
-        className: 'user-location-icon',
-        html: '<div class="circle"></div>'
-    });
 
     useEffect(() => {
         fetchParkings().then(data => {
