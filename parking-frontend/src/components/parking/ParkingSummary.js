@@ -1,9 +1,11 @@
-﻿import React, { useEffect, useState, useMemo } from 'react';
+﻿import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import PropTypes from 'prop-types';
 import { fetchParkingSummary } from '../../api/parkingService';
 
+
+const REFRESH_MS = Number(process.env.REACT_APP_REFRESH_INTERVAL) || 30000;
 
 function severityFromFloorSummary(summary) {
     if (!summary?.totalSlots) {
@@ -18,12 +20,17 @@ function severityFromFloorSummary(summary) {
 export default function ParkingSummary({ parking, onOpenModal }) {
     const parkingId = parking?.id;
     const [state, setState] = useState({ data: null, loading: false, error: null });
+    const firstLoadDone = useRef(false);
 
     useEffect(() => {
         let cancelled = false;
-        async function load() {
-            if (!parkingId) return;
-            setState({ data: null, loading: true, error: null });
+        async function load(isFirst = false) {
+            if (!parkingId) {
+                return;
+            }
+            if (isFirst) {
+                setState({ data: null, loading: true, error: null });
+            }
             try {
                 const data = await fetchParkingSummary(parkingId);
                 if (!cancelled) setState({ data, loading: false, error: null });
@@ -31,8 +38,12 @@ export default function ParkingSummary({ parking, onOpenModal }) {
                 if (!cancelled) setState({ data: null, loading: false, error: err?.message || 'Error' });
             }
         }
-        load();
-        return () => { cancelled = true; };
+        // primera carga
+        load(true).then(() => { firstLoadDone.current = true; });
+
+        // polling ligero
+        const interval = setInterval(() => load(false), REFRESH_MS);
+        return () => { cancelled = true; clearInterval(interval); };
     }, [parkingId]);
 
     const overall = state.data?.overall;

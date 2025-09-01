@@ -1,48 +1,117 @@
-﻿import React from 'react';
-import "../../styles/parkingLayout.css";
+﻿// src/components/commons/RenderSpot.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+import '../../styles/parkingLayout.css';
+
+// Normaliza tipo: acepta snake_case o kebab-case
+function normType(t) {
+    if (!t) return '';
+    const s = String(t).toLowerCase();
+    // ya soporta ambos: "drive_lane" -> "drive-lane"
+    return s.replace(/_/g, '-');
+}
+
+// ¿estado textual a partir de occupied?
+function stateFromOccupied(occupied) {
+    if (occupied === true) return 'occupied';
+    if (occupied === false) return 'available';
+    return ''; // null/undefined -> sin estado
+}
 
 export default function RenderSpot({ spots, cols, rows }) {
-
     const renderSpot = (row, col) => {
         const spot = spots.find((s) => s.row === row && s.col === col);
-        if (!spot || spot.type === 'drive-lane') {
-            return <div id={`spot-${row}-${col}`} className="parking-slot drive-lane" key={`${row}-${col}`} />;
-        }
-        if (!spot || spot.type === 'empty-space') {
-            return <div id={`spot-${row}-${col}`} className="parking-slot empty-space" key={`${row}-${col}`} />;
-        }
-        if (!spot || spot.type === 'entrance-down') {
-            return <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`} ><p>↓</p></div>;
-        }
-        if (!spot || spot.type === 'entrance-left') {
-            return <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`} ><p>←</p></div>;
-        }
-        if (!spot || spot.type === 'entrance-right') {
-            return <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`} ><p>→</p></div>;
-        }
-        if (!spot || spot.type === 'exit-up') {
-            return <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`} ><p>↑</p></div>;
-        }
-        if (!spot || spot.type === 'exit-right') {
-            return <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`} ><p>→</p></div>;
-        }
-        if (!spot || spot.type === 'exit-left') {
-            return <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`} ><p>←</p></div>;
-        }
-        let identifier = spot.id;
-        if (spot.type === "parking-slot" && spot.state === "available") {
-            return <div id={`spot-${row}-${col}`} className="parking-slot available" key={`${row}-${col}`} >{identifier}</div>;
-        }
-        if (spot.type === "parking-slot" && spot.state === "occupied") {
-            return <div id={`spot-${row}-${col}`} className="parking-slot occupied" key={`${row}-${col}`} >{identifier}</div>;
+
+        // Si no hay celda en esa posición, lo tratamos como vacío
+        if (!spot) {
+            return (
+                <div id={`spot-${row}-${col}`} className="parking-slot empty-space" key={`${row}-${col}`} />
+            );
         }
 
-        if (spot.type === "disabled" && spot.state === "available") {
-            return <div id={`spot-${row}-${col}`} className="parking-slot disabled" key={`${row}-${col}`} >♿</div>;
+        const t = normType(spot.type);
+        const state = stateFromOccupied(spot.occupied);
+        const identifier = spot.slotCode || spot.slotId || `${row}-${col}`;
+
+        // Vías y vacíos
+        if (t === 'drive-lane') {
+            return (
+                <div id={`spot-${row}-${col}`} className="parking-slot drive-lane" key={`${row}-${col}`} />
+            );
         }
-        if (spot.type === "disabled" && spot.state === "occupied") {
-            return <div id={`spot-${row}-${col}`} className="parking-slot occupied" key={`${row}-${col}`} >♿</div>;
+        if (t === 'empty-space') {
+            return (
+                <div id={`spot-${row}-${col}`} className="parking-slot empty-space" key={`${row}-${col}`} />
+            );
         }
+
+        // Flechas (entradas/salidas)
+        if (t === 'entrance-down') {
+            return (
+                <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`}>
+                    <p>↓</p>
+                </div>
+            );
+        }
+        if (t === 'entrance-left') {
+            return (
+                <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`}>
+                    <p>←</p>
+                </div>
+            );
+        }
+        if (t === 'entrance-right') {
+            return (
+                <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`}>
+                    <p>→</p>
+                </div>
+            );
+        }
+        if (t === 'exit-up') {
+            return (
+                <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`}>
+                    <p>↑</p>
+                </div>
+            );
+        }
+        if (t === 'exit-right') {
+            return (
+                <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`}>
+                    <p>→</p>
+                </div>
+            );
+        }
+        if (t === 'exit-left') {
+            return (
+                <div id={`spot-${row}-${col}`} className="parking-slot arrow" key={`${row}-${col}`}>
+                    <p>←</p>
+                </div>
+            );
+        }
+
+        // Plazas normales y PMR (♿) con estado por 'occupied'
+        if (t === 'parking-slot') {
+            const cls = state === 'occupied' ? 'occupied' : 'available';
+            return (
+                <div id={`spot-${row}-${col}`} className={`parking-slot ${cls}`} key={`${row}-${col}`}>
+                    {identifier}
+                </div>
+            );
+        }
+
+        if (t === 'disabled') {
+            const cls = state === 'occupied' ? 'occupied' : 'disabled';
+            return (
+                <div id={`spot-${row}-${col}`} className={`parking-slot ${cls}`} key={`${row}-${col}`}>
+                    ♿
+                </div>
+            );
+        }
+
+        // Fallback: si llega un tipo desconocido, lo pintamos vacío
+        return (
+            <div id={`spot-${row}-${col}`} className="parking-slot empty-space" key={`${row}-${col}`} />
+        );
     };
 
     return (
@@ -58,3 +127,8 @@ export default function RenderSpot({ spots, cols, rows }) {
         </div>
     );
 }
+RenderSpot.propTypes = {
+    spots: PropTypes.array.isRequired,
+    cols: PropTypes.number.isRequired,
+    rows: PropTypes.number.isRequired,
+};

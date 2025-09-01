@@ -7,6 +7,6 @@ export async function fetchParkingsSpots(parkingId) {
         return await response.json();
     } catch (error) {
         console.error("Error al obtener parkings:", error);
-        return [];
+        return { floorId, cells: [] };
     }
 }

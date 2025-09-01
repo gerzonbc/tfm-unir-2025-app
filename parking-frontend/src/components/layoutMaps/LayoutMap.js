@@ -1,6 +1,6 @@
 ﻿import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import RenderSpot2 from '../commons/RenderSpot2';
+import RenderSpot from '../commons/RenderSpot';
 
 export default function LayoutMap({ spots }) {
     const { rows, cols } = useMemo(() => {
@@ -9,6 +9,9 @@ export default function LayoutMap({ spots }) {
         return { rows: maxRow, cols: maxCol };
     }, [spots]);
 
-    return <RenderSpot2 spots={spots} cols={cols} rows={rows} />;
+    return <RenderSpot spots={spots} cols={cols} rows={rows} />;
 }
 
+LayoutMap.propTypes = {
+    spots: PropTypes.array
+};
