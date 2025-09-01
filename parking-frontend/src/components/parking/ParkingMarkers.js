@@ -51,7 +51,7 @@ function ParkingMarker({ parking, onOpenModal }) {
     // Definir el icono dinámico según la ocupación
     const icon = useMemo(() => {
         if (!summary?.totalSlots) {
-            return getParkingIcon(50, 80);
+            return getParkingIcon(0, 100);
         } // sin datos
         return getParkingIcon(summary.occupiedSlots, summary.totalSlots);                      // lleno
     }, [summary]);
