@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { fetchParkingSummary } from '../../api/parkingService';
 
 
-const REFRESH_MS = Number(process.env.REACT_APP_REFRESH_INTERVAL) || 30000;
+const REFRESH_MS = Number(process.env.REACT_APP_REFRESHS_INTERVAL) || 30000;
 
 function severityFromFloorSummary(summary) {
     if (!summary?.totalSlots) {
@@ -62,24 +62,30 @@ export default function ParkingSummary({ parking, onOpenModal }) {
                     <p><strong>Plazas Totales:</strong> {overall?.totalSlots ?? '—'}</p>
                     <p><strong>Plazas libres:</strong> {overall?.availableSlots ?? '—'}</p>
                     <p><strong>Plazas ocupadas:</strong> {overall?.occupiedSlots ?? '—'}</p>
+                    {/* <p><strong>Cargadores eléctricos:</strong> {overall?.availableChargers ?? '—'} / {overall?.totalChargers ?? '—'}</p> */}
+                    <p><strong>Cargadores eléctricos:</strong> 2</p>
+
 
                     <Divider />
                     <p><strong>Plantas:</strong></p>
                     <div className="flex flex-wrap md:flex-nowrap gap-2">
                         {floors.length > 0 ? (
                             floors.map((f) => (
-                                <Button
-                                    key={f.id}
-                                    onClick={() => onOpenModal?.({ ...parking, floorId: f.id, floorNumber: f.number })}
-                                    label={`P${f.number}`}
-                                    icon="pi pi-car"
-                                    rounded
-                                    text
-                                    severity={severityFromFloorSummary(f.summary)}
-                                    aria-label={`P${f.number}`}
-                                    tooltip={`Total: ${f.summary?.totalSlots ?? 0} · Libres: ${f.summary?.availableSlots ?? 0} · Ocupadas: ${f.summary?.occupiedSlots ?? 0}`}
-                                    tooltipOptions={{ position: 'top' }}
-                                />
+                                <React.Fragment key={f.id}>
+                                    <Button
+                                        key={f.id}
+                                        onClick={() => onOpenModal?.({ ...parking, floorId: f.id, floorNumber: f.number })}
+                                        label={`P${f.number}`}
+                                        icon="pi pi-car"
+                                        rounded
+                                        text
+                                        severity={severityFromFloorSummary(f.summary)}
+                                        aria-label={`P${f.number}`}
+                                        tooltip={`Total: ${f.summary?.totalSlots ?? 0} · Libres: ${f.summary?.availableSlots ?? 0} · Ocupadas: ${f.summary?.occupiedSlots ?? 0}`}
+                                        tooltipOptions={{ position: 'top' }}
+                                    />
+
+                                </React.Fragment>
                             ))
                         ) : (
                             <span>—</span>

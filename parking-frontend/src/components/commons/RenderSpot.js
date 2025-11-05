@@ -108,6 +108,15 @@ export default function RenderSpot({ spots, cols, rows }) {
             );
         }
 
+        if (t === 'electric-charger') {
+            const cls = state === 'occupied' ? 'occupied' : 'electric-charger';
+            return (
+                <div id={`spot-${row}-${col}`} className={`parking-slot ${cls}`} key={`${row}-${col}`}>
+                    ⚡
+                </div>
+            );
+        }
+
         // Fallback: si llega un tipo desconocido, lo pintamos vacío
         return (
             <div id={`spot-${row}-${col}`} className="parking-slot empty-space" key={`${row}-${col}`} />

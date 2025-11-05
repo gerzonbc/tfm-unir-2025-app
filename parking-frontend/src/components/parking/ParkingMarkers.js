@@ -8,7 +8,7 @@ import { fetchParkingSummary } from '../../api/parkingService';
 
 // Helper por si a veces viene embed (p.type.name) o plano (p.typeName)
 const getTypeName = (p) => p?.type?.name ?? p?.typeName ?? '—';
-const refreshMs = Number(process.env.REACT_APP_REFRESHS_INTERVAL) || 30000; // por defecto, 30s
+const refreshMs = Number(process.env.REACT_APP_REFRESHS_INTERVAL) || 10000; // por defecto, 30s
 
 
 export default function ParkingMarkers({ parkings, onOpenModal }) {
@@ -61,10 +61,19 @@ function ParkingMarker({ parking, onOpenModal }) {
             <Popup>
                 <strong>{parking.name} - {getTypeName(parking)}</strong><br />
                 <p>{parking.address}</p>
+                <a
+                    href={`https://www.google.com/maps?q=${parking.lat},${parking.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#007bff', textDecoration: 'underline' }}
+                >
+                    Ver ubicación
+                </a>
 
                 <ParkingSummary parking={parking} onOpenModal={onOpenModal} />
+
             </Popup>
-        </Marker>
+        </Marker >
     );
 }
 

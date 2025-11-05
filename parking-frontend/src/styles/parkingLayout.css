@@ -31,7 +31,8 @@
 }
 
 /* Plaza para discapacitados */
-.parking-slot.disabled {
+.parking-slot.disabled,
+.parking-slot.electric-charger {
     background-color: #2196f3;
     color: white;
     text-align: center;

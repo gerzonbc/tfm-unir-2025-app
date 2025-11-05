@@ -5,7 +5,7 @@ import LayoutMap from '../layoutMaps/LayoutMap';
 import { fetchParkingsSpots } from '../../api/parkingSpots';
 
 
-const REFRESH_MS = Number(process.env.REACT_APP_REFRESH_INTERVAL) || 30000;
+const REFRESH_MS = Number(process.env.REACT_APP_REFRESHS_INTERVAL) || 10000;
 
 export default function ParkingDetailModal({ visible, onHide, parking }) {
 
@@ -38,7 +38,7 @@ export default function ParkingDetailModal({ visible, onHide, parking }) {
             load(true);
             timerRef.current = setInterval(() => load(false), REFRESH_MS);
         }
-
+        console.log('ParkingDetailModal: useEffect cleanup');
         return () => {
             cancelled = true;
             if (timerRef.current) {
